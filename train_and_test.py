@@ -1,10 +1,12 @@
 import time
 import torch
+import numpy as np 
+import pickle
 
 from helpers import list_of_distances, make_one_hot
 
 def _train_or_test(model, dataloader, optimizer=None, class_specific=True, use_l1_mask=True,
-                   coefs=None, log=print):
+                   coefs=None, log=print, evaluation_pred=False):
     '''
     model: the multi-gpu model
     dataloader:
@@ -21,6 +23,7 @@ def _train_or_test(model, dataloader, optimizer=None, class_specific=True, use_l
     total_separation_cost = 0
     total_avg_separation_cost = 0
 
+    predicted_labels  = []
     for i, (image, label) in enumerate(dataloader):
         input = image.cuda()
         target = label.cuda()
@@ -99,13 +102,16 @@ def _train_or_test(model, dataloader, optimizer=None, class_specific=True, use_l
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
+        if evaluation_pred:
+                pre = predicted.cpu()
+                predicted_labels += pre
 
         del input
         del target
         del output
         del predicted
         del min_distances
-
+        
     end = time.time()
 
     log('\ttime: \t{0}'.format(end -  start))
@@ -116,11 +122,13 @@ def _train_or_test(model, dataloader, optimizer=None, class_specific=True, use_l
         log('\tavg separation:\t{0}'.format(total_avg_separation_cost / n_batches))
     log('\taccu: \t\t{0}%'.format(n_correct / n_examples * 100))
     log('\tl1: \t\t{0}'.format(model.module.last_layer.weight.norm(p=1).item()))
+    if evaluation_pred:
+        return predicted_labels
     p = model.module.prototype_vectors.view(model.module.num_prototypes, -1).cpu()
     with torch.no_grad():
         p_avg_pair_dist = torch.mean(list_of_distances(p, p))
     log('\tp dist pair: \t{0}'.format(p_avg_pair_dist.item()))
-
+    
     return n_correct / n_examples
 
 
@@ -138,6 +146,12 @@ def test(model, dataloader, class_specific=False, log=print):
     model.eval()
     return _train_or_test(model=model, dataloader=dataloader, optimizer=None,
                           class_specific=class_specific, log=log)
+
+def prediction(model, dataloader, class_specific=False, log=print, evaluation_pred=None):
+    log('\tprediction')
+    model.eval()
+    return _train_or_test(model=model, dataloader=dataloader, optimizer=None,
+                          class_specific=class_specific, log=log,evaluation_pred=evaluation_pred)
 
 
 def last_only(model, log=print):

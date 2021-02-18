@@ -1,0 +1,14 @@
+__pycache__/
+30_runs.txt
+links_to_datasets.txt
+mem0406.txt
+mem0608.txt
+mem0810.txt
+mem1012.txt
+mem1214.txt
+mem1416.txt
+README.txt
+test.txt
+saved_models/
+pretrained_models/
+test.pkl

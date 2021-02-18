@@ -4,6 +4,7 @@ import torch.utils.model_zoo as model_zoo
 import torch.nn.functional as F
 
 from resnet_features import resnet18_features, resnet34_features, resnet50_features, resnet101_features, resnet152_features
+from basic_features import basic_features
 from densenet_features import densenet121_features, densenet161_features, densenet169_features, densenet201_features
 from vgg_features import vgg11_features, vgg11_bn_features, vgg13_features, vgg13_bn_features, vgg16_features, vgg16_bn_features,\
                          vgg19_features, vgg19_bn_features
@@ -26,7 +27,8 @@ base_architecture_to_features = {'resnet18': resnet18_features,
                                  'vgg16': vgg16_features,
                                  'vgg16_bn': vgg16_bn_features,
                                  'vgg19': vgg19_features,
-                                 'vgg19_bn': vgg19_bn_features}
+                                 'vgg19_bn': vgg19_bn_features,
+                                 'basic': basic_features}
 
 class PPNet(nn.Module):
 

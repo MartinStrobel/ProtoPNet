@@ -1,22 +1,22 @@
-base_architecture = 'vgg19'
-img_size = 224
-prototype_shape = (2000, 128, 1, 1)
-num_classes = 200
+base_architecture = 'basic'
+img_size = 32
+prototype_shape = (100, 128, 1, 1)
+num_classes = 10
 prototype_activation_function = 'log'
 add_on_layers_type = 'regular'
 
-experiment_run = '003'
+experiment_run = '006'
 
-data_path = './datasets/cub200_cropped/'
-train_dir = data_path + 'train_cropped_augmented/'
-test_dir = data_path + 'test_cropped/'
-train_push_dir = data_path + 'train_cropped/'
-train_batch_size = 80
-test_batch_size = 100
+data_path = '../data/MNIST_Proto/'
+train_dir = data_path + 'train/'
+test_dir = data_path + 'test/'
+train_push_dir = data_path + 'train/'
+train_batch_size = 128
+test_batch_size = 128
 train_push_batch_size = 75
 
-joint_optimizer_lrs = {'features': 1e-4,
-                       'add_on_layers': 3e-3,
+joint_optimizer_lrs = {'features': 1e-3,
+                       'add_on_layers': 1e-3,
                        'prototype_vectors': 3e-3}
 joint_lr_step_size = 5
 
@@ -32,8 +32,8 @@ coefs = {
     'l1': 1e-4,
 }
 
-num_train_epochs = 1000
-num_warm_epochs = 5
+num_train_epochs = 51
+num_warm_epochs = 0
 
-push_start = 10
-push_epochs = [i for i in range(num_train_epochs) if i % 10 == 0]
+push_start = 5
+push_epochs = range(5,51,5)#[i for i in range(num_train_epochs) if i % 10 == 0]
