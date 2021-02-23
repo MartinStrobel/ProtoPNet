@@ -12,3 +12,13 @@ test.txt
 saved_models/
 pretrained_models/
 test.pkl
+mem_pred_05.txt
+mem_pred_10.txt
+mem_pred_15.txt
+mem_pred_20.txt
+mem_pred_25.txt
+mem_pred_30.txt
+mem_pred_35.txt
+mem_pred_40.txt
+mem0002.txt
+mem0204.txt
